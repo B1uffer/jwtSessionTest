@@ -32,6 +32,12 @@ public class JwtTokenizer {
                 .compact();
     }
 
+    public String generateRefreshJwtToken(String subject,
+                                          Date expiration,
+                                          String base64EncodedSecretKey) {
+        return null;
+    }
+
     /**
      * utility Method
      */

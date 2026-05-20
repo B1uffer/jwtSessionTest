@@ -35,7 +35,14 @@ public class JwtTokenizer {
     public String generateRefreshJwtToken(String subject,
                                           Date expiration,
                                           String base64EncodedSecretKey) {
-        return null;
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
+
+        return Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(Calendar.getInstance().getTime())
+                .setExpiration(expiration)
+                .signWith(key)
+                .compact();
     }
 
     /**

@@ -74,7 +74,10 @@ public class JwtTokenizerTest {
 
     @Test
     public void verifySignatureTest() {
-        
+        String accessToken = getAccessToken();
     }
 
+    private String getAccessToken(int timeUnit, int timeAmount) {
+        
+    }
 }

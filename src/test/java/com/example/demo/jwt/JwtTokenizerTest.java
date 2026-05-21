@@ -85,6 +85,11 @@ public class JwtTokenizerTest {
         assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
     }
 
+    @Test
+    public void verifyExpirationTest() {
+
+    }
+
     private String getAccessToken(int timeUnit, int timeAmount) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("memberId", 1);

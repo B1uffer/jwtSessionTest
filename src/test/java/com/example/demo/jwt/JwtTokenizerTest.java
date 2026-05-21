@@ -1,8 +1,12 @@
 package com.example.demo.jwt;
 
+import io.jsonwebtoken.io.Decoders;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JwtTokenizerTest {
@@ -21,6 +25,8 @@ public class JwtTokenizerTest {
 
     @Test
     public void encodeBase64SecretKeyTest() {
+        System.out.println("base64EncodedSecretKey : " + base64EncodedSecretKey);
 
+        assertThat(secretKey, is(new String(Decoders.BASE64.decode(base64EncodedSecretKey))));
     }
 }

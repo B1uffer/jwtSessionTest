@@ -53,4 +53,9 @@ public class JwtTokenizerTest {
         System.out.println("accessToken : " + accessToken);
         assertThat(accessToken, notNullValue());
     }
+
+    @Test
+    public void generateJwtRefreshTokenTest() {
+
+    }
 }

@@ -46,13 +46,19 @@ public class JwtTokenizer {
     }
 
     public void verifyJwtSignature(String jws, String base64EncodedSecretKey) {
+        Key key = getKeyFromBase64EncodedKey(base64EncodedSecretKey);
 
+        Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jws);
     }
 
     /**
      * utility Method
      */
     private Key getKeyFromBase64EncodedKey(String base64EncodedSecretKey) {
+        // 디코딩
         byte[] getBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
         Key key = Keys.hmacShaKeyFor(getBytes);
         return key;

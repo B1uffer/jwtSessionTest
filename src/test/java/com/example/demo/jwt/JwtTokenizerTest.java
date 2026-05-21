@@ -85,9 +85,11 @@ public class JwtTokenizerTest {
         assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
     }
 
+    @DisplayName("throw ExpiredJwtException when jws verify")
     @Test
-    public void verifyExpirationTest() {
-
+    public void verifyExpirationTest() throws InterruptedException {
+        String accessToken = getAccessToken(Calendar.SECOND, 1);
+        assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
     }
 
     private String getAccessToken(int timeUnit, int timeAmount) {

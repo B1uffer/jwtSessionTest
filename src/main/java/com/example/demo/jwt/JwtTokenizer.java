@@ -45,6 +45,10 @@ public class JwtTokenizer {
                 .compact();
     }
 
+    public void verifyJwtSignature(String jws, String base64EncodedSecretKey) {
+
+    }
+
     /**
      * utility Method
      */

@@ -78,6 +78,17 @@ public class JwtTokenizerTest {
     }
 
     private String getAccessToken(int timeUnit, int timeAmount) {
-        
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("memberId", 1);
+        claims.put("roles", List.of("USER"));
+
+        String subject = "test access token";
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(timeUnit, timeAmount);
+        Date expiration = calendar.getTime();
+
+        String accessToken = jwtTokenizer.generateJwtAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+
+        return accessToken;
     }
 }

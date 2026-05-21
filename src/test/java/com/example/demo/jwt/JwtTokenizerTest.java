@@ -29,4 +29,9 @@ public class JwtTokenizerTest {
 
         assertThat(secretKey, is(new String(Decoders.BASE64.decode(base64EncodedSecretKey))));
     }
+
+    @Test
+    public void generateJwtAccessTokenTest() {
+
+    }
 }

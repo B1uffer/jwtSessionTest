@@ -2,6 +2,7 @@ package com.example.demo.jwt;
 
 import io.jsonwebtoken.io.Decoders;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -14,6 +15,10 @@ import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JwtTokenizerTest {
@@ -72,9 +77,12 @@ public class JwtTokenizerTest {
      * JWT 검증 테스트
      */
 
+    @DisplayName("does not throw any Exception when jws verify")
     @Test
     public void verifySignatureTest() {
-        String accessToken = getAccessToken();
+        String accessToken = getAccessToken(Calendar.MINUTE, 10);
+        // 예외 안던짐
+        assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
     }
 
     private String getAccessToken(int timeUnit, int timeAmount) {

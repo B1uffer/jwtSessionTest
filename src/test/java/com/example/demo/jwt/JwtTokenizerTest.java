@@ -5,8 +5,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class JwtTokenizerTest {
@@ -32,6 +39,18 @@ public class JwtTokenizerTest {
 
     @Test
     public void generateJwtAccessTokenTest() {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("memberId", 1);
+        claims.put("roles", List.of("USER"));
 
+        String subject = "test access token";
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 10);
+        Date expiration = calendar.getTime();
+
+        String accessToken = jwtTokenizer.generateJwtAccessToken(claims, subject, expiration,base64EncodedSecretKey);
+
+        System.out.println("accessToken : " + accessToken);
+        assertThat(accessToken, notNullValue());
     }
 }

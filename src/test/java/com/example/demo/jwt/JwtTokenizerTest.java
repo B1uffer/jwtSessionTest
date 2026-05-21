@@ -66,4 +66,15 @@ public class JwtTokenizerTest {
         System.out.println("refreshToken : " + refreshToken);
         assertThat(refreshToken, notNullValue());
     }
+
+
+    /**
+     * JWT 검증 테스트
+     */
+
+    @Test
+    public void verifySignatureTest() {
+        
+    }
+
 }

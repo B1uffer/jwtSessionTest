@@ -1,5 +1,6 @@
 package com.example.demo.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.io.Decoders;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -90,6 +92,10 @@ public class JwtTokenizerTest {
     public void verifyExpirationTest() throws InterruptedException {
         String accessToken = getAccessToken(Calendar.SECOND, 1);
         assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
+
+        TimeUnit.MILLISECONDS.sleep(1500);
+
+        assertThrows(ExpiredJwtException.class, () -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
     }
 
     private String getAccessToken(int timeUnit, int timeAmount) {

@@ -4,7 +4,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 public class HmacJwtExample {
-    public void test() {
+    public static void main(String[] args) {
         String secretKey = "my-secret-key";
 
         // JWT 생성하기

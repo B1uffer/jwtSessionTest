@@ -1,0 +1,7 @@
+
+
+spring:
+  application:
+    name: demo1
+server:
+  port: 0

@@ -1,14 +1,19 @@
 package com.example.demo.order.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "ORDERS")
 @Setter
@@ -18,6 +23,17 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
+    private List<OrderCoffee> orderCoffees = new ArrayList<>();
+
+    // 커피 주문 추가하기
+    public void addOrderCoffee(OrderCoffee orderCoffee) {
+        this.orderCoffees.add(orderCoffee);
+        if(orderCoffee.getOrder() != this) { // orderCoffee가 바라보는 Order가 지금 Order와 다르다면
+            orderCoffee.addOrder(this); // 새로운 OrderCoffee에 order를 넣는다
+        }
+    }
 
     // 주문 상태
     @Enumerated(EnumType.STRING)

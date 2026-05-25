@@ -1,5 +1,6 @@
 package com.example.demo.coffee.entity;
 
+import com.example.demo.order.entity.Order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -7,9 +8,14 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Entity
 @Setter
@@ -40,6 +46,16 @@ public class Coffee {
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private CoffeeStatus coffeeStatus = CoffeeStatus.COFFEE_FOR_SALE;
+
+    @OneToMany(mappedBy = "coffee")
+    private List<OrderCoffee> orderCoffees = new ArrayList<>();
+
+    public void addOrderCoffee(OrderCoffee orderCoffee) {
+        this.orderCoffees.add(orderCoffee);
+        if(orderCoffee == null) {
+            throw new NoSuchElementException("커피 정보가 없어요!");
+        }
+    }
 
     public enum CoffeeStatus {
         COFFEE_FOR_SALE("커피 판매 중"),

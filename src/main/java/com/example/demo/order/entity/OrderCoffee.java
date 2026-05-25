@@ -37,12 +37,19 @@ public class OrderCoffee {
     @JoinColumn(name = "COFFEE_ID")
     private Coffee coffee;
 
-    public void addOrder(Order order) {
-        this.order = order;
+    public void addCoffee(Coffee coffee) {
+        this.coffee = coffee;
+        if(this.coffee.getOrderCoffees().contains(coffee)) { // 커피가 커피주문을 이미 들고있으면
+            // 새로운 커피주문을 갖게 해 중복을 피하면서 주문가능하게끔 함
+            this.coffee.addOrderCoffee(this);
+        }
     }
 
 
-    public void addCoffee(Coffee coffee) {
-        this.coffee = coffee;
+    public void addOrder(Order order) {
+        this.order = order;
+        if(this.order.getOrderCoffees().contains(order)) {
+            this.order.addOrderCoffee(this);
+        }
     }
 }

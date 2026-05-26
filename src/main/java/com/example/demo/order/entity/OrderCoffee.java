@@ -21,6 +21,9 @@ public class OrderCoffee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderCoffeeId;
 
+    /**
+     * 수량
+     */
     @Column(nullable = false)
     private int quantity;
 
@@ -37,6 +40,10 @@ public class OrderCoffee {
     @JoinColumn(name = "COFFEE_ID")
     private Coffee coffee;
 
+
+    /**
+     * setter
+     */
     public void addCoffee(Coffee coffee) {
         this.coffee = coffee;
         if(this.coffee.getOrderCoffees().contains(coffee)) { // 커피가 커피주문을 이미 들고있으면
@@ -44,7 +51,6 @@ public class OrderCoffee {
             this.coffee.addOrderCoffee(this);
         }
     }
-
 
     public void addOrder(Order order) {
         this.order = order;

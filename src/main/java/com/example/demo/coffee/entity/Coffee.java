@@ -1,6 +1,7 @@
 package com.example.demo.coffee.entity;
 
 import com.example.demo.order.entity.Order;
+import com.example.demo.order.entity.OrderCoffee;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,40 +27,54 @@ public class Coffee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long coffeeId;
 
-    // 한글이름
+    /**
+     * 한글이름
+     */
     @Column(length = 100, nullable = false)
     private String korName;
 
-    // 영문이름
+    /**
+     * 영문이름
+     */
     @Column(length = 100, nullable = false)
     private String engName;
 
-    // 가격
+    /**
+     * 가격
+     */
     @Column(nullable = false)
     private Integer price;
 
-    // 커피의 고유한 코드
+    /**
+     * 커피코드
+     */
     @Column(length = 3, nullable = false, unique = true)
     private String coffeeCode;
 
-    // 커피의 상태
+    /**
+     * 커피상태
+     */
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
     private CoffeeStatus coffeeStatus = CoffeeStatus.COFFEE_FOR_SALE;
 
+    /**
+     * Coffee가 OrderCoffee들을 가지고 있음
+     */
     @OneToMany(mappedBy = "coffee")
     private List<OrderCoffee> orderCoffees = new ArrayList<>();
 
     public void addOrderCoffee(OrderCoffee orderCoffee) {
         this.orderCoffees.add(orderCoffee);
-        if(orderCoffee == null) {
-            throw new NoSuchElementException("커피 정보가 없어요!");
+        if(orderCoffee.getCoffee() != this) {
+            orderCoffee.addCoffee(this);
         }
     }
 
+
     public enum CoffeeStatus {
-        COFFEE_FOR_SALE("커피 판매 중"),
-        COFFEE_SOLD_OUT("커피 판매 중지");
+        COFFEE_FOR_SALE("커피 판매중"),
+        COFFEE_SOLD_OUT("커피 판매중지");
 
         @Getter
         private String status;

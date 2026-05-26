@@ -44,6 +44,9 @@ dependencies {
 
     // gson
     implementation 'com.google.code.gson:gson'
+
+    // mapstruct
+    implementation 'org.mapstruct:mapstruct:1.5.2.Final'
 }
 
 tasks.named('test') {

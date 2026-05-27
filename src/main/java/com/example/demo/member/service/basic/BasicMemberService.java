@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -39,12 +40,14 @@ public class BasicMemberService implements MemberService {
     }
 
     @Override
-    public Member updateMember(Member member) {
-        return null;
+    public Member findMember(long memberId) {
+        Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchElementException("Member not found"));
+        return findMember;
     }
 
     @Override
-    public Member findMember(long memberId) {
+    public Member updateMember(Member member) {
         return null;
     }
 

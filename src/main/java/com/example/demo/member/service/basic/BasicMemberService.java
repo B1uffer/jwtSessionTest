@@ -61,8 +61,7 @@ public class BasicMemberService implements MemberService {
 
     @Override
     public void deleteMember(long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchElementException("Member not found"));
+        Member member = findVerifiedMember(memberId);
         memberRepository.delete(member);
     }
 

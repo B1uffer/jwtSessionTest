@@ -47,8 +47,16 @@ public class BasicMemberService implements MemberService {
 
     @Override
     public Member updateMember(Member member) {
-        Member updatedMember = memberRepository.save(member);
-        return updatedMember;
+        Member findMember = findVerifiedMember(member.getMemberId());
+
+        Optional.ofNullable(member.getName())
+                .ifPresent(name -> findMember.setName(name));
+        Optional.ofNullable(member.getPhone())
+                .ifPresent(phone -> findMember.setPhone(phone));
+        Optional.ofNullable(member.getMemberStatus())
+                .ifPresent(memberStatus -> findMember.setMemberStatus(memberStatus));
+        memberRepository.save(findMember);
+        return findMember;
     }
 
     @Override

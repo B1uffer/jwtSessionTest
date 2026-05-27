@@ -41,9 +41,8 @@ public class BasicMemberService implements MemberService {
 
     @Override
     public Member findMember(long memberId) {
-        Member findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchElementException("Member not found"));
-        return findMember;
+        Member member = findVerifiedMember(memberId);
+        return member;
     }
 
     @Override
@@ -61,7 +60,10 @@ public class BasicMemberService implements MemberService {
 
     @Override
     public Member findVerifiedMember(long memberId) {
-        return null;
+        Member member = memberRepository.findById(memberId)
+                        .orElseThrow(() -> new NoSuchElementException("Member not found"));
+        verifyExistsEmail(member.getEmail());
+        return member;
     }
 
     @Override

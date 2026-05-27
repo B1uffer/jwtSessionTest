@@ -48,7 +48,8 @@ public class BasicMemberService implements MemberService {
 
     @Override
     public Member updateMember(Member member) {
-        return null;
+        Member updatedMember = memberRepository.save(member);
+        return updatedMember;
     }
 
     @Override

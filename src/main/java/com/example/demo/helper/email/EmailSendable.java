@@ -1,4 +1,5 @@
 package com.example.demo.helper.email;
 
-public class EmailSendable {
+public interface EmailSendable {
+    void send(String message) throws InterruptedException;
 }

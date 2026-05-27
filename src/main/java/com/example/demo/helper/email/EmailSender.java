@@ -11,7 +11,7 @@ public class EmailSender {
         this.emailSendable = emailSendable;
     }
 
-    public void sendMail(String message) throws MailSendException {
-
+    public void sendMail(String message) throws MailSendException, InterruptedException{
+        emailSendable.send(message);
     }
 }

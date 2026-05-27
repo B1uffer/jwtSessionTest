@@ -2,12 +2,13 @@ package com.example.demo.member.service.basic;
 
 import com.example.demo.exception.BusinessLogicException;
 import com.example.demo.exception.ExceptionCode;
-import com.example.demo.helper.event.MemberRegistrationApplicationEvent;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
 import com.example.demo.member.service.MemberService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
@@ -45,6 +46,8 @@ public class BasicMemberService implements MemberService {
         return member;
     }
 
+    // propagation, isolation
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     @Override
     public Member updateMember(Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());

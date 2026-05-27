@@ -2,6 +2,7 @@ package com.example.demo.member.service.basic;
 
 import com.example.demo.exception.BusinessLogicException;
 import com.example.demo.exception.ExceptionCode;
+import com.example.demo.helper.event.MemberRegistrationApplicationEvent;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
 import com.example.demo.member.service.MemberService;
@@ -32,7 +33,9 @@ public class BasicMemberService implements MemberService {
     @Override
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
-        return null;
+        Member savedMember = memberRepository.save(member);
+
+        return savedMember;
     }
 
     @Override

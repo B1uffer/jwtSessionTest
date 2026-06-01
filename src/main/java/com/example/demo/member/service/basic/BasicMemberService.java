@@ -6,6 +6,7 @@ import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
 import com.example.demo.member.service.MemberService;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -44,6 +45,11 @@ public class BasicMemberService implements MemberService {
     public Member findMember(long memberId) {
         Member member = findVerifiedMember(memberId);
         return member;
+    }
+
+    @Override
+    public Page<Member> findMembers(int page, int size) {
+        return null;
     }
 
     // propagation, isolation

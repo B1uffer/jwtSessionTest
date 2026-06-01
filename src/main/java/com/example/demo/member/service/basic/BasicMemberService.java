@@ -51,7 +51,11 @@ public class BasicMemberService implements MemberService {
 
     @Override
     public Page<Member> findMembers(int page, int size) {
-        Page<Member> members = memberRepository.findAll(PageRequest.of(page, size, Sort.by("memberId").descending()));
+        Page<Member> members = memberRepository.findAll(PageRequest.of(
+                page,
+                size,
+                Sort.by("memberId").descending())
+        );
         return members;
     }
 

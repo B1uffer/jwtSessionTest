@@ -1,5 +1,11 @@
 package com.example.demo.dto;
 
-public class MultiResponseDto<T> {
+import lombok.Getter;
 
+import java.util.List;
+
+@Getter
+public class MultiResponseDto<T> {
+    private List<T> data;
+    private PageInfo pageInfo;
 }

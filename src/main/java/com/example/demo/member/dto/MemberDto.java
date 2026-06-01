@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class MemberDto {
+    // Inner class를 활용한 dto 구현
 
     /**
      * Post

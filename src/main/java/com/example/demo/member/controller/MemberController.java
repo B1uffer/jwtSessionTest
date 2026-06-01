@@ -70,7 +70,15 @@ public class MemberController {
     }
 
     @GetMapping("/{member-id}")
-    public ResponseEntity patchMember() {
-        return null;
+    public ResponseEntity patchMember(
+            @Positive @PathVariable("member-id") long memberId,
+            @Valid @RequestBody MemberDto.Patch requestBody
+    ) {
+        requestBody.setMemberId(memberId); // MemberDto.Path 타입의 requestBody에 받은 memberId를 넣음
+        Member member = memberService.updateMember(memberMapper.memberPatchToMember(requestBody)); // updateMember에 넣을 파라미터는 mapper를 활용해서 넣는다
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(member), HttpStatus.OK
+        );
     }
 }

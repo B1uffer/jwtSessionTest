@@ -7,6 +7,8 @@ import com.example.demo.member.repository.MemberRepository;
 import com.example.demo.member.service.MemberService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -49,7 +51,8 @@ public class BasicMemberService implements MemberService {
 
     @Override
     public Page<Member> findMembers(int page, int size) {
-        return null;
+        Page<Member> members = memberRepository.findAll(PageRequest.of(page, size, Sort.by("memberId").descending()));
+        return members;
     }
 
     // propagation, isolation

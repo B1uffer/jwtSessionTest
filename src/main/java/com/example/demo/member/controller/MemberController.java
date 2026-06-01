@@ -1,5 +1,6 @@
 package com.example.demo.member.controller;
 
+import com.example.demo.dto.MultiResponseDto;
 import com.example.demo.dto.SingleResponseDto;
 import com.example.demo.member.dto.MemberDto;
 import com.example.demo.member.entity.Member;
@@ -10,6 +11,7 @@ import com.example.demo.utils.UriCreator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 
 @Slf4j
 @Validated
@@ -59,6 +62,10 @@ public class MemberController {
     @GetMapping
     public ResponseEntity getMembers(@Positive @RequestParam int page,
                                      @Positive @RequestParam int size) {
-
+        Page<Member> pageMembers = memberService.findMembers(page - 1, size); // page, size를 활용해서 페이지에 해당하는 member 불러오기
+        List<Member> members = pageMembers.getContent(); // pageMembers의 정보 가져오기
+        return new ResponseEntity<>( // 이걸 데이터 형태로 쏜다
+                new MultiResponseDto<>(memberMapper.membersToMemberResponses(members), pageMembers),
+                HttpStatus.OK);
     }
 }

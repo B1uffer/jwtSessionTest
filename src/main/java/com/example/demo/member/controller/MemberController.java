@@ -1,5 +1,6 @@
 package com.example.demo.member.controller;
 
+import com.example.demo.dto.SingleResponseDto;
 import com.example.demo.member.dto.MemberDto;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.mapper.MemberMapper;
@@ -7,11 +8,14 @@ import com.example.demo.member.service.MemberService;
 import com.example.demo.stamp.Stamp;
 import com.example.demo.utils.UriCreator;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +49,9 @@ public class MemberController {
     }
 
     @GetMapping("/{member_id}")
-    public ResponseEntity getMember() {
-        return null;
+    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
+        Member member = memberService.findMember(memberId);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(memberMapper.memberToMemberResponse(member)), HttpStatus.OK);
     }
 }

@@ -68,4 +68,9 @@ public class MemberController {
                 new MultiResponseDto<>(memberMapper.membersToMemberResponses(members), pageMembers),
                 HttpStatus.OK);
     }
+
+    @GetMapping("/{member-id}")
+    public ResponseEntity patchMember() {
+        return null;
+    }
 }

@@ -44,7 +44,7 @@ public class BasicCoffeeService implements CoffeeService {
     }
 
     @Override
-    public void verifyExistsCoffee(String coffeeCode) {
+    public void verifyExistsCoffeeUseCode(String coffeeCode) {
         Optional<Coffee> coffee = coffeeRepository.findByCoffeeCode(coffeeCode);
         if (coffee.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.COFFEE_CODE_EXISTS);
@@ -52,7 +52,9 @@ public class BasicCoffeeService implements CoffeeService {
     }
 
     @Override
-    public Coffee findVerifiedCoffee(long coffeeId) {
-        return null;
+    public Coffee findVerifiedCoffeeUseId(long coffeeId) {
+        Optional<Coffee> coffee = coffeeRepository.findById(coffeeId);
+        Coffee findCoffee = coffee.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COFFEE_NOT_FOUND));
+        return findCoffee;
     }
 }

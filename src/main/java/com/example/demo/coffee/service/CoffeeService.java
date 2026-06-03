@@ -10,6 +10,6 @@ public interface CoffeeService {
     Coffee updateCoffee(Coffee coffee);
     void deleteCoffee(long coffeeId);
 
-    void verifyExistsCoffee(String coffeeCode);
-    Coffee findVerifiedCoffee(long coffeeId);
+    void verifyExistsCoffeeUseCode(String coffeeCode);
+    Coffee findVerifiedCoffeeUseId(long coffeeId);
 }

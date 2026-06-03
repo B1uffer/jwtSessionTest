@@ -3,8 +3,12 @@ package com.example.demo.coffee.service.basic;
 import com.example.demo.coffee.entity.Coffee;
 import com.example.demo.coffee.repository.CoffeeRepository;
 import com.example.demo.coffee.service.CoffeeService;
+import com.example.demo.exception.BusinessLogicException;
+import com.example.demo.exception.ExceptionCode;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class BasicCoffeeService implements CoffeeService {
@@ -41,7 +45,10 @@ public class BasicCoffeeService implements CoffeeService {
 
     @Override
     public void verifyExistsCoffee(String coffeeCode) {
-
+        Optional<Coffee> coffee = coffeeRepository.findByCoffeeCode(coffeeCode);
+        if (coffee.isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.COFFEE_CODE_EXISTS);
+        }
     }
 
     @Override

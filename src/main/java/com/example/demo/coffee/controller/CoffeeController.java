@@ -63,10 +63,17 @@ public class CoffeeController {
         );
     }
 
+    // 수정 API
     @GetMapping("/{coffee-id}")
     public ResponseEntity patchCoffee(
             @Positive @PathVariable("coffee-id") long coffeeId,
             @Valid @RequestBody CoffeePatchDto requestBody) {
-        return null;
+
+        requestBody.setCoffeeId(coffeeId);
+        Coffee coffee = coffeeService.updateCoffee(coffeeMapper.coffeePathToCoffee(requestBody));
+
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(coffee), HttpStatus.OK
+        );
     }
 }

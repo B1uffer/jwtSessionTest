@@ -5,10 +5,12 @@ import com.example.demo.coffee.entity.Coffee;
 import com.example.demo.coffee.mapper.CoffeeMapper;
 import com.example.demo.coffee.repository.CoffeeRepository;
 import com.example.demo.coffee.service.CoffeeService;
+import com.example.demo.dto.MultiResponseDto;
 import com.example.demo.dto.SingleResponseDto;
 import com.example.demo.utils.UriCreator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v11/coffees")
@@ -50,8 +53,12 @@ public class CoffeeController {
     }
 
     @GetMapping
-    public ResponseEntity getAllCoffees(@Positive @RequestParam int size,
-                                        @Positive @RequestParam int page) {
-        return null;
+    public ResponseEntity getAllCoffees(@Positive @RequestParam int page,
+                                        @Positive @RequestParam int size) {
+        Page<Coffee> pageCoffees = coffeeService.findCoffees(page, size);
+        List<Coffee> coffees = pageCoffees.getContent();
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(coffeeMapper.coffeesToCoffeeResponseDto(coffees), pageCoffees), HttpStatus.OK
+        );
     }
 }

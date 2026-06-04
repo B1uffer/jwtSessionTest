@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -46,5 +47,11 @@ public class CoffeeController {
         Coffee coffee = coffeeService.findCoffee(coffeeId);
         return new ResponseEntity<>(
                 new SingleResponseDto<>(coffeeMapper.coffeeToCoffeeResponseDto(coffee)), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity getAllCoffees(@Positive @RequestParam int size,
+                                        @Positive @RequestParam int page) {
+        return null;
     }
 }

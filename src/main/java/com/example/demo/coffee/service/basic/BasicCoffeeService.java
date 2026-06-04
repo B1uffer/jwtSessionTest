@@ -68,7 +68,8 @@ public class BasicCoffeeService implements CoffeeService {
 
     @Override
     public void deleteCoffee(long coffeeId) {
-
+        Coffee coffee = findVerifiedCoffeeUseId(coffeeId);
+        coffeeRepository.delete(coffee);
     }
 
     @Override

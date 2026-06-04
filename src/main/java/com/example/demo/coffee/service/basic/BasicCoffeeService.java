@@ -30,7 +30,9 @@ public class BasicCoffeeService implements CoffeeService {
 
     @Override
     public Coffee findCoffee(long coffeeId) {
-        return null;
+        // 검증
+        Coffee verifiedCoffee = findVerifiedCoffeeUseId(coffeeId);
+        return verifiedCoffee;
     }
 
     @Override

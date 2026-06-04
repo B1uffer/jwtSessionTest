@@ -6,8 +6,11 @@ import com.example.demo.coffee.service.CoffeeService;
 import com.example.demo.exception.BusinessLogicException;
 import com.example.demo.exception.ExceptionCode;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,7 +40,12 @@ public class BasicCoffeeService implements CoffeeService {
 
     @Override
     public Page<Coffee> findCoffees(int page, int size) {
-        return null;
+        Page<Coffee> coffee = coffeeRepository.findAll(PageRequest.of(
+                page,
+                size,
+                Sort.by("coffeeId").descending())
+        );
+        return coffee;
     }
 
     @Override

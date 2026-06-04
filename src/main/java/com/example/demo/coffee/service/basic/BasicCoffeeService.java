@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +51,19 @@ public class BasicCoffeeService implements CoffeeService {
 
     @Override
     public Coffee updateCoffee(Coffee coffee) {
-        return null;
+        Coffee findCoffee = findVerifiedCoffeeUseId(coffee.getCoffeeId());
+        Optional.ofNullable(coffee.getKorName())
+                .ifPresent(korName -> findCoffee.setKorName(korName));
+        Optional.ofNullable(coffee.getEngName())
+                        .ifPresent(engName -> findCoffee.setEngName(engName));
+        Optional.ofNullable(coffee.getPrice())
+                        .ifPresent(price -> findCoffee.setPrice(price));
+        Optional.ofNullable(coffee.getCoffeeStatus())
+                        .ifPresent(coffeeStatus -> findCoffee.setCoffeeStatus(coffeeStatus));
+        Optional.ofNullable(coffee.getCoffeeCode())
+                .ifPresent(coffeeCode -> findCoffee.setCoffeeCode(coffeeCode));
+        coffeeRepository.save(findCoffee);
+        return findCoffee;
     }
 
     @Override

@@ -79,7 +79,11 @@ public class CoffeeController {
     }
 
     @DeleteMapping("/{coffee-id}")
-    public ResponseEntity deleteCoffee() {
-        return null;
+    public ResponseEntity deleteCoffee(
+            @Positive @PathVariable("coffee-id") long coffeeId
+    ) {
+        coffeeService.deleteCoffee(coffeeId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

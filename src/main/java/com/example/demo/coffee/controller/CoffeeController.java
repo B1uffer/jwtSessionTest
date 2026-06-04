@@ -1,5 +1,6 @@
 package com.example.demo.coffee.controller;
 
+import com.example.demo.coffee.dto.CoffeePatchDto;
 import com.example.demo.coffee.dto.CoffeePostDto;
 import com.example.demo.coffee.entity.Coffee;
 import com.example.demo.coffee.mapper.CoffeeMapper;
@@ -60,5 +61,12 @@ public class CoffeeController {
         return new ResponseEntity<>(
                 new MultiResponseDto<>(coffeeMapper.coffeesToCoffeeResponseDto(coffees), pageCoffees), HttpStatus.OK
         );
+    }
+
+    @GetMapping("/{coffee-id}")
+    public ResponseEntity patchCoffee(
+            @Positive @PathVariable("coffee-id") long coffeeId,
+            @Valid @RequestBody CoffeePatchDto requestBody) {
+        return null;
     }
 }

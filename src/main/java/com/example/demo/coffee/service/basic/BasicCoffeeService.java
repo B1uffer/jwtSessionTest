@@ -20,7 +20,12 @@ public class BasicCoffeeService implements CoffeeService {
 
     @Override
     public Coffee createCoffee(Coffee coffee) {
-        return null;
+        // 대문자로 만듬
+        String bigCoffeeCode = coffee.getCoffeeCode().toUpperCase();
+        // 검증
+        verifyExistsCoffeeUseCode(bigCoffeeCode);
+        Coffee saveCoffee = coffeeRepository.save(coffee);
+        return saveCoffee;
     }
 
     @Override

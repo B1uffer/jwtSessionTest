@@ -5,9 +5,11 @@ import com.example.demo.coffee.entity.Coffee;
 import com.example.demo.coffee.mapper.CoffeeMapper;
 import com.example.demo.coffee.repository.CoffeeRepository;
 import com.example.demo.coffee.service.CoffeeService;
+import com.example.demo.dto.SingleResponseDto;
 import com.example.demo.utils.UriCreator;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +43,8 @@ public class CoffeeController {
 
     @GetMapping("/{coffee_id}")
     public ResponseEntity getCoffee(@PathVariable("coffee-id") @Positive long coffeeId) {
-        return null;
+        Coffee coffee = coffeeService.findCoffee(coffeeId);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(coffeeMapper.coffeeToCoffeeResponseDto(coffee)), HttpStatus.OK);
     }
 }

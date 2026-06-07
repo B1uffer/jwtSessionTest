@@ -1,5 +1,6 @@
 package com.example.demo.order.service.basic;
 
+import com.example.demo.coffee.entity.Coffee;
 import com.example.demo.coffee.service.CoffeeService;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
@@ -39,8 +40,9 @@ public class BasicOrderService implements OrderService {
 
     @Override
     public Order createOrder(Order order) {
-
-        return null;
+        verifyOrder(order);
+        Order saveOrder = orderRepository.save(order);
+        return saveOrder;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.example.demo.order.mapper;
 
 import com.example.demo.coffee.entity.Coffee;
 import com.example.demo.member.entity.Member;
+import com.example.demo.order.dto.OrderCoffeeDto;
+import com.example.demo.order.dto.OrderCoffeeResponseDto;
 import com.example.demo.order.dto.OrderPatchDto;
 import com.example.demo.order.dto.OrderPostDto;
 import com.example.demo.order.dto.OrderResponseDto;
@@ -45,4 +47,16 @@ public interface OrderMapper {
     /**
      * List<OrderCoffee> 를 받아서 List<OrderResponseDto>로 반환하는 mapper
      */
+    default List<OrderCoffeeResponseDto> orderCoffeesToOrderResponseDtos(List<OrderCoffee> orderCoffeeList) {
+        return orderCoffeeList.stream()
+                .map(orderCoffee -> OrderCoffeeResponseDto
+                        .builder()
+                        .coffeeId(orderCoffee.getOrderCoffeeId())
+                        .quantity(orderCoffee.getQuantity())
+                        .korName(orderCoffee.getCoffee().getKorName())
+                        .engName(orderCoffee.getCoffee().getEngName())
+                        .price(orderCoffee.getCoffee().getPrice())
+                        .build()).collect(Collectors.toList()
+                );
+    }
 }

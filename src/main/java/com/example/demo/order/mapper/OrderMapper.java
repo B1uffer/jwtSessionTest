@@ -17,6 +17,9 @@ public interface OrderMapper {
     Order orderPathDtoToOrder(OrderPatchDto orderPatchDto);
     List<OrderResponseDto> orderToOrderResponseDtoList(List<Order> orderList);
 
+    /**
+     * OrderPostDto를 받아서 Order로 바꾸는 Mapper
+     */
     default Order orderPostDtoToOrder(OrderPostDto orderPostDto) {
         Order order = new Order();
         Member member = new Member();
@@ -38,4 +41,8 @@ public interface OrderMapper {
 
         return order;
     }
+
+    /**
+     * List<OrderCoffee> 를 받아서 List<OrderResponseDto>로 반환하는 mapper
+     */
 }

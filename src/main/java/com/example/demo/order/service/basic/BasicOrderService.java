@@ -1,15 +1,15 @@
 package com.example.demo.order.service.basic;
 
-import com.example.demo.coffee.entity.Coffee;
 import com.example.demo.coffee.service.CoffeeService;
+import com.example.demo.helper.StampCalculator;
 import com.example.demo.member.entity.Member;
-import com.example.demo.member.repository.MemberRepository;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.order.entity.Order;
 import com.example.demo.order.mapper.OrderMapper;
 import com.example.demo.order.repository.OrderCoffeeRepository;
 import com.example.demo.order.repository.OrderRepository;
 import com.example.demo.order.service.OrderService;
+import com.example.demo.stamp.Stamp;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,12 +94,27 @@ public class BasicOrderService implements OrderService {
 
     @Override
     public void updateStamp(Order order) {
+        Member member = memberService.findMember(order.getMember().getMemberId());
+        // calculateStampCount로 order 안에 있는 orderCoffee들의 stamp를 합함
+        int calculate = calculateStampCount(order);
 
+        // member에서 stamp를 가져오고
+        Stamp stamp = member.getStamp();
+
+        // stamp에 있는 stampCount와 기존에 있던 stamp를 합한 것들을 서로 더한다
+        stamp.setStampCount(StampCalculator.calculateStampCount(
+                stamp.getStampCount(), calculate));
+
+        member.setStamp(stamp);
+        memberService.updateMember(member);
     }
 
     @Override
     public int calculateStampCount(Order order) {
-        return 0;
+        return order.getOrderCoffees().stream()
+                .map(orderCoffee -> orderCoffee.getQuantity())
+                .mapToInt(quantity -> quantity)
+                .sum();
     }
 
     @Override

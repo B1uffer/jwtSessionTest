@@ -47,7 +47,8 @@ public class BasicOrderService implements OrderService {
 
     @Override
     public Order findOrder(long orderId) {
-        return null;
+        Order order = findVerifiedOrderId(orderId);
+        return order;
     }
 
     @Override

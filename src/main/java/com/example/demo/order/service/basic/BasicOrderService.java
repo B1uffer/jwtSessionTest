@@ -90,8 +90,7 @@ public class BasicOrderService implements OrderService {
         orderRepository.save(findOrder);
     }
 
-    @Override
-    public Order findVerifiedOrderId(long orderId) {
+    private Order findVerifiedOrderId(long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new NoSuchElementException("Order not found"));
         return order;
@@ -101,8 +100,7 @@ public class BasicOrderService implements OrderService {
      * Order를 통해 Member, Coffee가 존재하는지 확인하는 로직
      * 이 주문이 이 사람이 주문했고, 이 커피가 맞는가
      */
-    @Override
-    public void verifyOrder(Order order) {
+    private void verifyOrder(Order order) {
         // member가 존재하는지 확인하기
         memberService.findVerifiedMember(order.getMember().getMemberId());
 
@@ -112,8 +110,7 @@ public class BasicOrderService implements OrderService {
         });
     }
 
-    @Override
-    public void updateStamp(Order order) {
+    private void updateStamp(Order order) {
         Member member = memberService.findMember(order.getMember().getMemberId());
         // calculateStampCount로 order 안에 있는 orderCoffee들의 stamp를 합함
         int calculate = calculateStampCount(order);
@@ -129,8 +126,7 @@ public class BasicOrderService implements OrderService {
         memberService.updateMember(member);
     }
 
-    @Override
-    public int calculateStampCount(Order order) {
+    private int calculateStampCount(Order order) {
         return order.getOrderCoffees().stream()
                 .map(orderCoffee -> orderCoffee.getQuantity())
                 .mapToInt(quantity -> quantity)

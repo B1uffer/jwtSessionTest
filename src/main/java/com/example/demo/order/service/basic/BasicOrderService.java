@@ -1,6 +1,8 @@
 package com.example.demo.order.service.basic;
 
 import com.example.demo.coffee.service.CoffeeService;
+import com.example.demo.exception.BusinessLogicException;
+import com.example.demo.exception.ExceptionCode;
 import com.example.demo.helper.StampCalculator;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.service.MemberService;
@@ -71,9 +73,20 @@ public class BasicOrderService implements OrderService {
 
     }
 
+    /**
+     * 주문 취소하기
+     */
     @Override
     public void cancelOrder(long orderId) {
+        Order findOrder = findVerifiedOrderId(orderId);
+        int step = findOrder.getOrderStatus().getStepNumber();
 
+        // step이 2이상일 경우, ORDER_CONFIRM에 주문 취소가 되지 않도록 함
+        if(step >= 2) {
+            throw new BusinessLogicException(ExceptionCode.CANNOT_CHANGE_ORDER);
+        }
+        findOrder.setOrderStatus(Order.OrderStauts.ORDER_CANCEL);
+        orderRepository.save(findOrder);
     }
 
     @Override

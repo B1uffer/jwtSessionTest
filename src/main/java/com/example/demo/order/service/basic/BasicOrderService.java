@@ -41,7 +41,7 @@ public class BasicOrderService implements OrderService {
     @Override
     public Order createOrder(Order order) {
         verifyOrder(order);
-        Order saveOrder = orderRepository.save(order);
+        Order saveOrder = saveOrder(order);
         return saveOrder;
     }
 
@@ -117,8 +117,7 @@ public class BasicOrderService implements OrderService {
                 .sum();
     }
 
-    @Override
-    public void saveOrder(Order order) {
-        orderRepository.save(order);
+    private Order saveOrder(Order order) {
+        return orderRepository.save(order);
     }
 }

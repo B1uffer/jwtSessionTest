@@ -23,6 +23,4 @@ public interface OrderService {
      */
     void updateStamp(Order order);
     int calculateStampCount(Order order);
-
-    void saveOrder(Order order);
 }

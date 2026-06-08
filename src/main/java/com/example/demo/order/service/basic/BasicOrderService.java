@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -58,7 +59,11 @@ public class BasicOrderService implements OrderService {
 
     @Override
     public Order updateOrder(Order order) {
-        return null;
+        Order findOrder = findVerifiedOrderId(order.getOrderId());
+        Optional.ofNullable(findOrder.getOrderStatus())
+                .ifPresent(orderStauts -> findOrder.setOrderStatus(orderStauts)
+                );
+        return saveOrder(findOrder);
     }
 
     @Override

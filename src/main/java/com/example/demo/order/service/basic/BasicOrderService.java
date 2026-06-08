@@ -70,7 +70,8 @@ public class BasicOrderService implements OrderService {
 
     @Override
     public void deleteOrder(long orderId) {
-
+        Order findOrder = findVerifiedOrderId(orderId);
+        orderRepository.delete(findOrder);
     }
 
     /**

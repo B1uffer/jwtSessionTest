@@ -11,16 +11,4 @@ public interface OrderService {
     void deleteOrder(long orderId);
 
     void cancelOrder(long orderId);
-
-    /**
-     * 검증 및 stamp 관리, saveOrder는 private로
-     */
-    Order findVerifiedOrderId(long orderId);
-    void verifyOrder(Order order);
-
-    /**
-     * Order를 받아서 stamp 관리하기
-     */
-    void updateStamp(Order order);
-    int calculateStampCount(Order order);
 }

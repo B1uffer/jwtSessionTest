@@ -22,19 +22,13 @@ import java.util.NoSuchElementException;
 @Transactional
 public class BasicOrderService implements OrderService {
     private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
-    private final OrderCoffeeRepository orderCoffeeRepository;
     private final MemberService memberService;
     private final CoffeeService coffeeService;
 
     BasicOrderService(OrderRepository orderRepository,
-                      OrderMapper orderMapper,
-                      OrderCoffeeRepository orderCoffeeRepository,
                       MemberService memberService,
                       CoffeeService coffeeService) {
         this.orderRepository = orderRepository;
-        this.orderMapper = orderMapper;
-        this.orderCoffeeRepository = orderCoffeeRepository;
         this.memberService = memberService;
         this.coffeeService = coffeeService;
     }

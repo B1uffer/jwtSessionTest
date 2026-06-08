@@ -11,6 +11,8 @@ import com.example.demo.order.repository.OrderRepository;
 import com.example.demo.order.service.OrderService;
 import com.example.demo.stamp.Stamp;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +55,12 @@ public class BasicOrderService implements OrderService {
 
     @Override
     public Page<Order> findOrders(int page, int size) {
-        return null;
+        Page<Order> pageOrders = orderRepository.findAll(
+                PageRequest.of(page, size, Sort.by("orderId")
+                        .descending()
+                )
+        );
+        return pageOrders;
     }
 
     @Override

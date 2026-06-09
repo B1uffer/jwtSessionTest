@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public interface OrderMapper {
     Order orderPathDtoToOrder(OrderPatchDto orderPatchDto);
     List<OrderResponseDto> orderToOrderResponseDtoList(List<Order> orderList);
+    OrderResponseDto orderToOrderResponseDto(Order order);
 
     /**
      * OrderPostDto를 받아서 Order로 바꾸는 Mapper

@@ -5,10 +5,12 @@ import com.example.demo.exception.ExceptionCode;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
 import com.example.demo.member.service.MemberService;
+import com.example.demo.utils.CustomAuthorityUtils;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,10 +31,17 @@ public class BasicMemberService implements MemberService {
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
 
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
+
     public BasicMemberService(MemberRepository memberRepository,
-                              ApplicationEventPublisher publisher) {
+                              ApplicationEventPublisher publisher,
+                              PasswordEncoder passwordEncoder,
+                              CustomAuthorityUtils authorityUtils) {
         this.memberRepository = memberRepository;
         this.publisher = publisher;
+        this.passwordEncoder = passwordEncoder;
+        this.authorityUtils = authorityUtils;
     }
 
     @Override

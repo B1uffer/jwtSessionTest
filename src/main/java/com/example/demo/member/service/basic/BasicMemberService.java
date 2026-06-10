@@ -2,6 +2,7 @@ package com.example.demo.member.service.basic;
 
 import com.example.demo.exception.BusinessLogicException;
 import com.example.demo.exception.ExceptionCode;
+import com.example.demo.helper.event.MemberRegistrationApplicationEvent;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.repository.MemberRepository;
 import com.example.demo.member.service.MemberService;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -47,7 +49,18 @@ public class BasicMemberService implements MemberService {
     @Override
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
+
+        // 추가1, Password 암호화하기
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+
+        // 추가2, DB에 User Role 저장하기
+        List<String> roles = authorityUtils.createRolese(member.getEmail());
+        member.setRoles(roles);
+
         Member savedMember = memberRepository.save(member);
+
+        publisher.publishEvent(new MemberRegistrationApplicationEvent(this, savedMember));
 
         return savedMember;
     }

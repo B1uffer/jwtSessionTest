@@ -33,6 +33,7 @@ public class BasicMemberService implements MemberService {
     private final MemberRepository memberRepository;
     private final ApplicationEventPublisher publisher;
 
+    // 추가 필드 주입, 2개
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 

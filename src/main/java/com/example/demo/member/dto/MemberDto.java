@@ -22,6 +22,10 @@ public class MemberDto {
         @Email
         private String email;
 
+        // 패스워드 필드 추가
+        @NotBlank
+        private String password;
+
         @NotBlank(message = "이름은 공백이 아니어야합니다.")
         private String name;
 

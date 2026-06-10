@@ -28,6 +28,7 @@ public class Member {
     /**
      * 비밀번호
      */
+    // (1) 추가
     @Column(nullable = false, length = 100)
     private String password;
 

@@ -2,16 +2,7 @@ package com.example.demo.member.entity;
 
 import com.example.demo.order.entity.Order;
 import com.example.demo.stamp.Stamp;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,6 +24,9 @@ public class Member {
      */
     @Column(nullable = false, unique = true, updatable = false)
     private String email;
+
+    @Column(nullable = false, length = 100)
+    private String password;
 
     /**
      * 이름
@@ -64,6 +58,11 @@ public class Member {
      */
     @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Stamp stamp;
+
+
+    // (2) 추가
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     /**
      * 생성자

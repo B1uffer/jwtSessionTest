@@ -1,5 +1,7 @@
 package com.example.demo.jwt;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
@@ -45,7 +47,7 @@ public class JwtTokenizer {
 
         // AccessToken을 만듬
         String accessToken = Jwts.builder()
-                .setClaims(claims)
+                .setClaims(claims) // 이 claims는 custom claims임
                 .setSubject(subject)
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
@@ -72,6 +74,19 @@ public class JwtTokenizer {
                 .compact();
 
         return refreshToken;
+    }
+
+    // Jwt에 넣었던 custom claims를 얻는 메서드
+    public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
+        Key key = getKeyFromBase64EncodedSecretKey(base64EncodedSecretKey);
+
+        // 중간에 build()를 하고 파싱을 한다
+        Jws<Claims> claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jws);
+
+        return claims;
     }
 
     /**

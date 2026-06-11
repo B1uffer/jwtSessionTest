@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -43,6 +44,7 @@ public class JwtTokenizer {
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
+                .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact(); // build가 아니라 compact() 메서드로 닫는다

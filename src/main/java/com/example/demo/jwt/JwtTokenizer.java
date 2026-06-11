@@ -1,5 +1,6 @@
 package com.example.demo.jwt;
 
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
@@ -38,7 +39,14 @@ public class JwtTokenizer {
             Date expiration,
             String base64EncodedSecretKey
     ) {
-        return null;
+        Key key = getKeyFromBase64EncodedSecretKey(base64EncodedSecretKey);
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setExpiration(expiration)
+                .signWith(key)
+                .compact(); // build가 아니라 compact() 메서드로 닫는다
+        return token;
     }
 
     /**

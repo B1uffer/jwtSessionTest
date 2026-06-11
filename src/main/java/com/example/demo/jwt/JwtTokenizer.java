@@ -1,11 +1,14 @@
 package com.example.demo.jwt;
 
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
+import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 
@@ -28,6 +31,7 @@ public class JwtTokenizer {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
+    // JWT accessToken을 생성하는 메서드
     public String generateAccessToken(
             Map<String, Object> claims,
             String subject,
@@ -35,5 +39,18 @@ public class JwtTokenizer {
             String base64EncodedSecretKey
     ) {
         return null;
+    }
+
+    /**
+     * Utils
+     */
+    private Key getKeyFromBase64EncodedSecretKey(String base64EncodedSecretKey) {
+        // Decoders는 jsonWebToken.io
+        byte[] keyBytes = Decoders.BASE64.decode(base64EncodedSecretKey);
+
+        // 타입 Key는 Security.key, Keys는 jsonWebToken.security.keys
+        Key key = Keys.hmacShaKeyFor(keyBytes);
+
+        return key;
     }
 }

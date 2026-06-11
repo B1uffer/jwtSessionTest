@@ -40,23 +40,38 @@ public class JwtTokenizer {
             Date expiration,
             String base64EncodedSecretKey
     ) {
+        // Key를 얻고
         Key key = getKeyFromBase64EncodedSecretKey(base64EncodedSecretKey);
-        String token = Jwts.builder()
+
+        // AccessToken을 만듬
+        String accessToken = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(Calendar.getInstance().getTime())
                 .setExpiration(expiration)
                 .signWith(key)
                 .compact(); // build가 아니라 compact() 메서드로 닫는다
-        return token;
+        return accessToken;
     }
 
+    // JWT refreshToken을 생성하는 메서드
     public String generateRefreshToken(
             String subject,
             Date expiration,
             String base64EncodedSecretKey
     ) {
-        return null;
+        // Key를 얻고
+        Key key = getKeyFromBase64EncodedSecretKey(base64EncodedSecretKey);
+
+        // RefreshToken을 만듬
+        String refreshToken = Jwts.builder()
+                .setSubject(subject)
+                .setIssuedAt(Calendar.getInstance().getTime())
+                .setExpiration(expiration)
+                .signWith(key)
+                .compact();
+
+        return refreshToken;
     }
 
     /**

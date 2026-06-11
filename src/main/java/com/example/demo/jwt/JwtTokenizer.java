@@ -89,6 +89,10 @@ public class JwtTokenizer {
         return claims;
     }
 
+    public void verifySignature(String jws, String base64EncodedSecretKey) {
+
+    }
+
     /**
      * Utils
      */

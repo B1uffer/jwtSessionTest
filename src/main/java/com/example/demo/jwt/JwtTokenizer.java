@@ -76,11 +76,11 @@ public class JwtTokenizer {
         return refreshToken;
     }
 
-    // Jwt에 넣었던 custom claims를 얻는 메서드
+    // Jwt에 넣었던 custom claims를 검증하고, 추출하는 메서드
     public Jws<Claims> getClaims(String jws, String base64EncodedSecretKey) {
         Key key = getKeyFromBase64EncodedSecretKey(base64EncodedSecretKey);
 
-        // 중간에 build()를 하고 파싱을 한다
+        // key를 넣고, build() 한 다음 검증한다
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -89,8 +89,14 @@ public class JwtTokenizer {
         return claims;
     }
 
+    // Signature 검증하는 메서드
     public void verifySignature(String jws, String base64EncodedSecretKey) {
+        Key key = getKeyFromBase64EncodedSecretKey(base64EncodedSecretKey);
 
+        Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(jws);
     }
 
     /**

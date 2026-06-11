@@ -7,8 +7,6 @@ import com.example.demo.helper.StampCalculator;
 import com.example.demo.member.entity.Member;
 import com.example.demo.member.service.MemberService;
 import com.example.demo.order.entity.Order;
-import com.example.demo.order.mapper.OrderMapper;
-import com.example.demo.order.repository.OrderCoffeeRepository;
 import com.example.demo.order.repository.OrderRepository;
 import com.example.demo.order.service.OrderService;
 import com.example.demo.stamp.Stamp;

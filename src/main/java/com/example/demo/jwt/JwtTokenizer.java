@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.Map;
 
 @Component
 public class JwtTokenizer {
@@ -24,5 +26,14 @@ public class JwtTokenizer {
     // secretKey를 base64로 인코딩하는 메서드
     public String encodeBase64SecretKey(String secretKey) {
         return Encoders.BASE64.encode(secretKey.getBytes(StandardCharsets.UTF_8));
+    }
+
+    public String generateAccessToken(
+            Map<String, Object> claims,
+            String subject,
+            Date expiration,
+            String base64EncodedSecretKey
+    ) {
+        return null;
     }
 }

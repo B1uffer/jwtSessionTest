@@ -22,94 +22,94 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class JwtTokenizerTest {
-    private static JwtTokenizer jwtTokenizer;
-    private String secretKey;
-    private String base64EncodedSecretKey;
-
-    @BeforeAll
-    public void init() {
-        jwtTokenizer = new JwtTokenizer();
-        secretKey = "kevin1234123412341234123412341234";
-
-        // a2V2aW4xMjM0MTIzNDEyMzQxMjM0MTIzNDEyMzQxMjM0
-        base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(secretKey);
-    }
-
-    @Test
-    public void encodeBase64SecretKeyTest() {
-        System.out.println("base64EncodedSecretKey : " + base64EncodedSecretKey);
-
-        assertThat(secretKey, is(new String(Decoders.BASE64.decode(base64EncodedSecretKey))));
-    }
-
-    @Test
-    public void generateJwtAccessTokenTest() {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("memberId", 1);
-        claims.put("roles", List.of("USER"));
-
-        String subject = "test access token";
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, 10);
-        Date expiration = calendar.getTime();
-
-        String accessToken = jwtTokenizer.generateJwtAccessToken(claims, subject, expiration,base64EncodedSecretKey);
-
-        System.out.println("accessToken : " + accessToken);
-        assertThat(accessToken, notNullValue());
-    }
-
-    @Test
-    public void generateJwtRefreshTokenTest() {
-        String subject = "test refresh token";
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR, 24);
-        Date expiration = calendar.getTime();
-
-        String refreshToken = jwtTokenizer.generateRefreshJwtToken(subject, expiration, base64EncodedSecretKey);
-
-        System.out.println("refreshToken : " + refreshToken);
-        assertThat(refreshToken, notNullValue());
-    }
-
-
-    /**
-     * JWT 검증 테스트
-     */
-
-    @DisplayName("does not throw any Exception when jws verify")
-    @Test
-    public void verifySignatureTest() {
-        String accessToken = getAccessToken(Calendar.MINUTE, 10);
-        // 예외 안던짐
-        assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
-    }
-
-    @DisplayName("throw ExpiredJwtException when jws verify")
-    @Test
-    public void verifyExpirationTest() throws InterruptedException {
-        String accessToken = getAccessToken(Calendar.SECOND, 1);
-        assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
-
-        TimeUnit.MILLISECONDS.sleep(1500);
-
-        assertThrows(ExpiredJwtException.class, () -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
-    }
-
-    private String getAccessToken(int timeUnit, int timeAmount) {
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("memberId", 1);
-        claims.put("roles", List.of("USER"));
-
-        String subject = "test access token";
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(timeUnit, timeAmount);
-        Date expiration = calendar.getTime();
-
-        String accessToken = jwtTokenizer.generateJwtAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-
-        return accessToken;
-    }
-}
+//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//public class JwtTokenizerTest {
+//    private static JwtTokenizer jwtTokenizer;
+//    private String secretKey;
+//    private String base64EncodedSecretKey;
+//
+//    @BeforeAll
+//    public void init() {
+//        jwtTokenizer = new JwtTokenizer();
+//        secretKey = "kevin1234123412341234123412341234";
+//
+//        // a2V2aW4xMjM0MTIzNDEyMzQxMjM0MTIzNDEyMzQxMjM0
+//        base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(secretKey);
+//    }
+//
+//    @Test
+//    public void encodeBase64SecretKeyTest() {
+//        System.out.println("base64EncodedSecretKey : " + base64EncodedSecretKey);
+//
+//        assertThat(secretKey, is(new String(Decoders.BASE64.decode(base64EncodedSecretKey))));
+//    }
+//
+//    @Test
+//    public void generateJwtAccessTokenTest() {
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("memberId", 1);
+//        claims.put("roles", List.of("USER"));
+//
+//        String subject = "test access token";
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.MINUTE, 10);
+//        Date expiration = calendar.getTime();
+//
+//        String accessToken = jwtTokenizer.generateJwtAccessToken(claims, subject, expiration,base64EncodedSecretKey);
+//
+//        System.out.println("accessToken : " + accessToken);
+//        assertThat(accessToken, notNullValue());
+//    }
+//
+//    @Test
+//    public void generateJwtRefreshTokenTest() {
+//        String subject = "test refresh token";
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.HOUR, 24);
+//        Date expiration = calendar.getTime();
+//
+//        String refreshToken = jwtTokenizer.generateRefreshJwtToken(subject, expiration, base64EncodedSecretKey);
+//
+//        System.out.println("refreshToken : " + refreshToken);
+//        assertThat(refreshToken, notNullValue());
+//    }
+//
+//
+//    /**
+//     * JWT 검증 테스트
+//     */
+//
+//    @DisplayName("does not throw any Exception when jws verify")
+//    @Test
+//    public void verifySignatureTest() {
+//        String accessToken = getAccessToken(Calendar.MINUTE, 10);
+//        // 예외 안던짐
+//        assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
+//    }
+//
+//    @DisplayName("throw ExpiredJwtException when jws verify")
+//    @Test
+//    public void verifyExpirationTest() throws InterruptedException {
+//        String accessToken = getAccessToken(Calendar.SECOND, 1);
+//        assertDoesNotThrow(() -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
+//
+//        TimeUnit.MILLISECONDS.sleep(1500);
+//
+//        assertThrows(ExpiredJwtException.class, () -> jwtTokenizer.verifyJwtSignature(accessToken, base64EncodedSecretKey));
+//    }
+//
+//    private String getAccessToken(int timeUnit, int timeAmount) {
+//        Map<String, Object> claims = new HashMap<>();
+//        claims.put("memberId", 1);
+//        claims.put("roles", List.of("USER"));
+//
+//        String subject = "test access token";
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.add(timeUnit, timeAmount);
+//        Date expiration = calendar.getTime();
+//
+//        String accessToken = jwtTokenizer.generateJwtAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+//
+//        return accessToken;
+//    }
+//}

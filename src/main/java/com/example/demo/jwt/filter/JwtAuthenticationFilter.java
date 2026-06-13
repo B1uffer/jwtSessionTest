@@ -47,8 +47,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     // AbstractAuthenticationProcessingFilter의 메서드
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        super.successfulAuthentication(request, response, chain, authResult);
+    protected void successfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain chain,
+                                            Authentication authResult) throws IOException, ServletException {
+        Member member = (Member)authResult.getPrincipal();
+
+        String accessToken = delegateAccessToken(member);
+        String refreshToken = delegateRefreshToken(member);
+
+        response.setHeader("Authorization", "Bearer " + accessToken);
+        response.setHeader("Refresh", refreshToken);
     }
 
     /**

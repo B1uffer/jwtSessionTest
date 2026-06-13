@@ -58,7 +58,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     // refresh token 생성
-    private String delegateRefreshToken() {
-        return null;
+    private String delegateRefreshToken(Member member) {
+        String subject = member.getEmail();
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
+        return refreshToken;
     }
 }

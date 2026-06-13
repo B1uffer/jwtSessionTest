@@ -1,6 +1,7 @@
 package com.example.demo.jwt.filter;
 
 import com.example.demo.jwt.JwtTokenizer;
+import com.example.demo.member.entity.Member;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
@@ -38,10 +42,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     /**
      * utils
      */
-    private String delegateAccessToken() {
-        return null;
+    //access token 생성
+    private String delegateAccessToken(Member member) {
+        // custom claims
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", member.getName());
+        claims.put("roles", member.getRoles());
+
+        String subject = member.getEmail();
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+        return accessToken;
     }
 
+    // refresh token 생성
     private String delegateRefreshToken() {
         return null;
     }

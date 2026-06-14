@@ -23,6 +23,11 @@ public class SecurityConfiguration {
         this.jwtTokenizer = jwtTokenizer;
     }
 
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http.build();
+    }
+
 
     // v1
 //    @Bean

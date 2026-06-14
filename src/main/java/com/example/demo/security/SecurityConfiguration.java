@@ -1,8 +1,10 @@
 package com.example.demo.security;
 
 import com.example.demo.jwt.JwtTokenizer;
+import com.example.demo.jwt.filter.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -27,6 +29,19 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.build();
+    }
+
+    public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
+        @Override
+        public void configure(HttpSecurity builder) {
+            // authentication 가져옴
+            AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
+
+            // jwtAuthenticationFilter에 authentication, jwtToken을 집어넣음
+            JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            authenticationFilter.setFilterProcessesUrl("/v2/auth/login");
+            builder.addFilter(authenticationFilter);
+        }
     }
 
     // v1
@@ -65,11 +80,4 @@ public class SecurityConfiguration {
 //
 //        return source;
 //    }
-}
-
-class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
-    @Override
-    public void configure(HttpSecurity builder) {
-        super.configure(builder);
-    }
 }

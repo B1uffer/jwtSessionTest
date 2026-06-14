@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import com.example.demo.jwt.JwtTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -15,39 +16,48 @@ import java.util.Arrays;
 
 @Configuration
 public class SecurityConfiguration {
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .headers(headers -> headers
-                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
-                )
-                .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
-                .formLogin(form -> form.disable())
-                .httpBasic(basic -> basic.disable())
-                .authorizeHttpRequests(
-                        authorize -> authorize.anyRequest().permitAll()
-                )
-        ;
-        return http.build();
+    // v2
+    private final JwtTokenizer jwtTokenizer;
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+        this.jwtTokenizer = jwtTokenizer;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        // 콘텐츠 표시 오류가 발생했을 땐 /** 를 \\/** 등으로 표기한 뒤 테스트? 해보기
-        // 실제 코드 구현시에는 /** 가 맞다고 한다
-
-        return source;
-    }
+    // v1
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .headers(headers -> headers
+//                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
+//                )
+//                .csrf(csrf -> csrf.disable())
+//                .cors(Customizer.withDefaults())
+//                .formLogin(form -> form.disable())
+//                .httpBasic(basic -> basic.disable())
+//                .authorizeHttpRequests(
+//                        authorize -> authorize.anyRequest().permitAll()
+//                )
+//        ;
+//        return http.build();
+//    }
+//
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//    }
+//
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("*"));
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        // 콘텐츠 표시 오류가 발생했을 땐 /** 를 \\/** 등으로 표기한 뒤 테스트? 해보기
+//        // 실제 코드 구현시에는 /** 가 맞다고 한다
+//
+//        return source;
+//    }
 }

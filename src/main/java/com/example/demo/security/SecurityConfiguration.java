@@ -27,7 +27,19 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
+        http
+                .headers(header -> header.frameOptions(
+                        frameOptions -> frameOptions.sameOrigin())
+                )
+                .csrf(csrf -> csrf.disable())
+                .cors(Customizer.withDefaults())
+                .formLogin(login -> login.disable())
+                .httpBasic(basic -> basic.disable())
+                .authorizeHttpRequests(
+                        authorize -> authorize.anyRequest().permitAll()
+                )
+                .apply(new CustomFilterConfigurer());
         return http.build();
     }
 
@@ -40,6 +52,7 @@ public class SecurityConfiguration {
             // jwtAuthenticationFilter에 authentication, jwtToken을 집어넣음
             JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             authenticationFilter.setFilterProcessesUrl("/v2/auth/login");
+
             builder.addFilter(authenticationFilter);
         }
     }

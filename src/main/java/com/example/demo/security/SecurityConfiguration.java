@@ -2,6 +2,7 @@ package com.example.demo.security;
 
 import com.example.demo.jwt.JwtTokenizer;
 import com.example.demo.jwt.filter.JwtAuthenticationFilter;
+import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,7 +38,8 @@ public class SecurityConfiguration {
                 .formLogin(login -> login.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(
-                        authorize -> authorize.anyRequest().permitAll()
+                        authorize -> authorize
+                                .anyRequest().permitAll()
                 )
                 .apply(new CustomFilterConfigurer());
         return http.build();
@@ -51,7 +53,7 @@ public class SecurityConfiguration {
 
             // jwtAuthenticationFilter에 authentication, jwtToken을 집어넣음
             JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
-            authenticationFilter.setFilterProcessesUrl("/v2/auth/login");
+            authenticationFilter.setFilterProcessesUrl("/v11/auth/login");
 
             builder.addFilter(authenticationFilter);
         }

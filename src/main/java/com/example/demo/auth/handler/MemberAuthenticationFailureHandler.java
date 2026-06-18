@@ -1,4 +1,4 @@
-package com.example.demo.jwt.handler;
+package com.example.demo.auth.handler;
 
 import com.example.demo.response.ErrorResponse;
 import com.google.gson.Gson;

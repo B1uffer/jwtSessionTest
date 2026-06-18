@@ -1,4 +1,4 @@
-package com.example.demo.jwt;
+package com.example.demo.auth.userDetails;
 
 import com.example.demo.exception.BusinessLogicException;
 import com.example.demo.exception.ExceptionCode;

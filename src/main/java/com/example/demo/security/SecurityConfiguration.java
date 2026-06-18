@@ -1,10 +1,10 @@
 package com.example.demo.security;
 
-import com.example.demo.jwt.JwtTokenizer;
-import com.example.demo.jwt.filter.JwtAuthenticationFilter;
-import com.example.demo.jwt.filter.JwtVerificationFilter;
-import com.example.demo.jwt.handler.MemberAuthenticationFailureHandler;
-import com.example.demo.jwt.handler.MemberAuthenticationSuccessHandler;
+import com.example.demo.auth.jwt.JwtTokenizer;
+import com.example.demo.auth.filter.JwtAuthenticationFilter;
+import com.example.demo.auth.filter.JwtVerificationFilter;
+import com.example.demo.auth.handler.MemberAuthenticationFailureHandler;
+import com.example.demo.auth.handler.MemberAuthenticationSuccessHandler;
 import com.example.demo.utils.CustomAuthorityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

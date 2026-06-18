@@ -1,7 +1,7 @@
-package com.example.demo.jwt.filter;
+package com.example.demo.auth.filter;
 
-import com.example.demo.jwt.JwtTokenizer;
-import com.example.demo.jwt.dto.LoginDto;
+import com.example.demo.auth.jwt.JwtTokenizer;
+import com.example.demo.auth.jwt.dto.LoginDto;
 import com.example.demo.member.entity.Member;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

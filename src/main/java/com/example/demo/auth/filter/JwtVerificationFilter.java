@@ -1,6 +1,6 @@
-package com.example.demo.jwt.filter;
+package com.example.demo.auth.filter;
 
-import com.example.demo.jwt.JwtTokenizer;
+import com.example.demo.auth.jwt.JwtTokenizer;
 import com.example.demo.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

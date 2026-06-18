@@ -2,13 +2,18 @@ package com.example.demo.security;
 
 import com.example.demo.jwt.JwtTokenizer;
 import com.example.demo.jwt.filter.JwtAuthenticationFilter;
-import org.springframework.boot.security.autoconfigure.web.servlet.PathRequest;
+import com.example.demo.jwt.filter.JwtVerificationFilter;
+import com.example.demo.jwt.handler.MemberAuthenticationFailureHandler;
+import com.example.demo.jwt.handler.MemberAuthenticationSuccessHandler;
+import com.example.demo.utils.CustomAuthorityUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,8 +28,12 @@ public class SecurityConfiguration {
     // v2
     private final JwtTokenizer jwtTokenizer;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+    // v4
+    private final CustomAuthorityUtils customAuthorityUtils;
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils customAuthorityUtils) {
         this.jwtTokenizer = jwtTokenizer;
+        this.customAuthorityUtils = customAuthorityUtils;
     }
 
     @Bean
@@ -34,14 +43,20 @@ public class SecurityConfiguration {
                         frameOptions -> frameOptions.sameOrigin())
                 )
                 .csrf(csrf -> csrf.disable())
-                .cors(Customizer.withDefaults())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // v4
                 .formLogin(login -> login.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(
                         authorize -> authorize
+                                .requestMatchers(HttpMethod.POST, "/*/members").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/*/members").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/*/members/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.PATCH, "/*/members/**").hasRole("USER")
+                                .requestMatchers(HttpMethod.DELETE, "/*/members/**").hasRole("USER")
                                 .anyRequest().permitAll()
                 )
-                .apply(new CustomFilterConfigurer());
+                .with(new CustomFilterConfigurer(), Customizer.withDefaults());
         return http.build();
     }
 
@@ -52,13 +67,37 @@ public class SecurityConfiguration {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             // jwtAuthenticationFilter에 authentication, jwtToken을 집어넣음
-            JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
-            authenticationFilter.setFilterProcessesUrl("/v11/auth/login");
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
+            jwtAuthenticationFilter.setFilterProcessesUrl("/v2/auth/login");
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            builder.addFilter(authenticationFilter);
+            // v4
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, customAuthorityUtils);
+
+            builder.addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
 
+    // v1
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .headers(headers -> headers
+//                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
+//                )
+//                .csrf(csrf -> csrf.disable())
+//                .cors(Customizer.withDefaults())
+//                .formLogin(form -> form.disable())
+//                .httpBasic(basic -> basic.disable())
+//                .authorizeHttpRequests(
+//                        authorize -> authorize.anyRequest().permitAll()
+//                )
+//        ;
+//        return http.build();
+//    }
+//
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -77,21 +116,4 @@ public class SecurityConfiguration {
 
         return source;
     }
-    // v1
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .headers(headers -> headers
-//                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
-//                )
-//                .csrf(csrf -> csrf.disable())
-//                .cors(Customizer.withDefaults())
-//                .formLogin(form -> form.disable())
-//                .httpBasic(basic -> basic.disable())
-//                .authorizeHttpRequests(
-//                        authorize -> authorize.anyRequest().permitAll()
-//                )
-//        ;
-//        return http.build();
-//    }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.security;
 
+import com.example.demo.auth.handler.MemberAccessDeniedHandler;
+import com.example.demo.auth.handler.MemberAuthenticationEntryPoint;
 import com.example.demo.auth.jwt.JwtTokenizer;
 import com.example.demo.auth.filter.JwtAuthenticationFilter;
 import com.example.demo.auth.filter.JwtVerificationFilter;
@@ -47,6 +49,11 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // v4
                 .formLogin(login -> login.disable())
                 .httpBasic(basic -> basic.disable())
+                .exceptionHandling(
+                        exception -> exception
+                                .authenticationEntryPoint(new MemberAuthenticationEntryPoint()) // v5 추가
+                                .accessDeniedHandler(new MemberAccessDeniedHandler()) // v5 추가
+                )
                 .authorizeHttpRequests(
                         authorize -> authorize
                                 .requestMatchers(HttpMethod.POST, "/*/members").permitAll()

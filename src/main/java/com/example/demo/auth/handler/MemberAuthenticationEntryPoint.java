@@ -1,9 +1,11 @@
 package com.example.demo.auth.handler;
 
+import com.example.demo.auth.utils.ErrorResponder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,10 @@ public class MemberAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
+        Exception exception = (Exception) request.getAttribute("exception");
+        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED);
+
+        logExceptionMessage(authException, exception);
     }
 
     /**

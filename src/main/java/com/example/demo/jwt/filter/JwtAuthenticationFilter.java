@@ -34,10 +34,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+            System.out.println("JwtAuthenticationFilter 진입");
+            System.out.println("request uri : " + request.getRequestURI());
+
             LoginDto loginDto =objectMapper.readValue(request.getInputStream(), LoginDto.class);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                     loginDto.getUsername(), loginDto.getPassword()
             );
+
+            System.out.println("email : " + loginDto.getUsername());
+            System.out.println("password : " + loginDto.getPassword());
+
             return authenticationManager.authenticate(authenticationToken);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -58,6 +65,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
+
+        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
 
     /**

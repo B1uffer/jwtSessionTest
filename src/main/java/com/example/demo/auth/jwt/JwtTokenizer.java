@@ -3,7 +3,9 @@ package com.example.demo.auth.jwt;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.Getter;
@@ -49,6 +51,18 @@ public class JwtTokenizer {
     }
 
     public Map<String, Object> getClaims(String token) {
-        return null;
+        try {
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            JWSVerifier verifier = new MACVerifier(secretKey.getBytes(StandardCharsets.UTF_8));
+
+            if(!signedJWT.verify(verifier)) {
+                throw new RuntimeException("JWT 검증 실패");
+            }
+
+            JWTClaimsSet claimsSet = signedJWT.getJWTClaimsSet();
+            return claimsSet.getClaims();
+        } catch(Exception e) {
+            throw new RuntimeException("JWT 파싱 실패", e);
+        }
     }
 }

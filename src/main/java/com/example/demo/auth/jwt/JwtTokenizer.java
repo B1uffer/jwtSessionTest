@@ -47,4 +47,8 @@ public class JwtTokenizer {
             throw new RuntimeException("JWT 발급 실패", e);
         }
     }
+
+    public Map<String, Object> getClaims(String token) {
+        return null;
+    }
 }

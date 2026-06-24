@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,10 +60,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Member member = (Member)authResult.getPrincipal();
 
         String accessToken = delegateAccessToken(member);
-        String refreshToken = delegateRefreshToken(member);
 
         response.setHeader("Authorization", "Bearer " + accessToken);
-        response.setHeader("Refresh", refreshToken);
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
@@ -80,20 +77,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         claims.put("roles", member.getRoles());
 
         String subject = member.getEmail();
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
-        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
+        String accessToken = jwtTokenizer.generateAccessToken(claims, subject);
         return accessToken;
-    }
-
-    // refresh token 생성
-    private String delegateRefreshToken(Member member) {
-        String subject = member.getEmail();
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
-        return refreshToken;
     }
 }

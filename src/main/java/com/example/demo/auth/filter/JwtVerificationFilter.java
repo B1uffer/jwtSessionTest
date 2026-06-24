@@ -2,7 +2,6 @@ package com.example.demo.auth.filter;
 
 import com.example.demo.auth.jwt.JwtTokenizer;
 import com.example.demo.utils.CustomAuthorityUtils;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,14 +32,9 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        try {
+
             Map<String, Object> claims = verifyJws(request);
             setAuthenticationToContext(claims);
-        } catch (ExpiredJwtException ee) {
-            request.setAttribute("error", ee.getMessage());
-        } catch (Exception e) {
-            request.setAttribute("error", e.getMessage());
-        }
 
         filterChain.doFilter(request, response);
     }
@@ -54,8 +48,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
-        String base64SecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64SecretKey).getBody();
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws);
 
         return claims;
     }
